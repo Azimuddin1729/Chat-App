@@ -4,6 +4,7 @@ import dotenv from "dotenv"
 import cors from "cors"
 import cookieParser from "cookie-parser";
 import mongoose from "mongoose";
+import { authRouter } from "./routes/AuthRoute.js";
 
 dotenv.config();
 const port=process.env.PORT||3003;
@@ -19,6 +20,7 @@ app.use(cors({
 
 app.use(express.json());
 
+app.use("/api/auth",authRouter);
 
 app.listen(port,()=>{
     console.log(`server is started at http://localhost:${port}`)

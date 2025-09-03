@@ -3,23 +3,80 @@ import Background from "@/assets/login3.png"
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-
-
-
+import { apiClient } from "@/lib/api-client";
+import { LOGIN_ROUTE, SIGNUP_ROUTE } from "@/utils/constants";
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { toast } from "sonner";
 
 const Auth = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+  const navigate= useNavigate();
+
+  function validateSignup(){
+        if(!email.length){
+          toast.error("Email is needed");
+          return false;
+        }
+        else if(password.length<6){
+          toast.error("password too small , make sure it is atleast of length 6");
+          return false;
+        }
+
+        else if(confirmPassword!==password){
+            toast.error("Password and confirm password doesn't match")
+            return false;
+        }
+
+        return true;  
+  }
+  function validateLogin(){
+        if(!email.length){
+          toast.error("Email is needed");
+          return false;
+        }
+        if(!password.length){
+          toast.error("Please enter your password ")
+          return false;
+        }
+        return true;  
+  }
+  async function signupHandle(){
+     if(validateSignup()){
+        // alert("all goood")
+        const res=await apiClient.post(SIGNUP_ROUTE,{email,password},{
+          withCredentials:true
+        });
+        console.log(res.data.user);
+        if(res.status===201){
+          navigate("/profile");
+        }
+     }
+     
+     else{
+      //will we not do this ??
+     }
+  }
 
   async function loginHandle(){
-     
+      if(validateLogin()){
+          const res=await apiClient.post(LOGIN_ROUTE,{email,password},{withCredentials:true})
+          console.log(res);
+          if(res.data.user.id){
+            if(res.data.user.profileSetup){
+              navigate("/chat");
+            }
+            else{
+              navigate("/profile")
+            }
+          }
+      }
+      
   }
 
-  async function signupHandle(){
-     
-  }
+  
 
   
   return (
@@ -43,29 +100,9 @@ const Auth = () => {
                       </p>
 
                   <div className="flex items-center justify-center w-full mt-4">
-                      <Tabs className="w-3/4">
+                      <Tabs className="w-3/4" defaultValue="login">
                       {/* single quantity */}
                         <TabsList className="bg-neutral-200 w-full">
-                          <TabsTrigger value="signup"
-                          className="
-                          
-                          w-full
-                          border-b-amber-100
-                          p-3
-                          border-b-2
-
-                          data-[state=active]:bg-white
-
-                          data-[state=active]:text-black
-
-                          data-[state=active]:border-b-purple-500
-
-                          data-[state=active]:font-semibold 
-                          
-                          transition-all duration-300  " >
-                            Signup
-                          </TabsTrigger>
-
                           <TabsTrigger value="login"
                           className="
                           
@@ -87,10 +124,34 @@ const Auth = () => {
                             Login
                           </TabsTrigger>
                           
+                          <TabsTrigger value="signup"
+                          className="
+                          
+                          w-full
+                          border-b-amber-100
+                          p-3
+                          border-b-2
+
+                          data-[state=active]:bg-white
+
+                          data-[state=active]:text-black
+
+                          data-[state=active]:border-b-purple-500
+
+                          data-[state=active]:font-semibold 
+                          
+                          transition-all duration-300  " >
+                            Signup
+                          </TabsTrigger>
+
+                          
+                          
                         </TabsList>
 
-                        <TabsContent value="signup"
-                        className="flex flex-col gap-5 mt-15"
+                        
+
+                        <TabsContent value="login"
+                          className="flex flex-col gap-5 mt-10"
                         >
 
                           <Input placeholder="Email" className="rounded-full p-7"
@@ -109,16 +170,19 @@ const Auth = () => {
                           }}>
                           </Input>
 
-                          <Button className="p-4 rounded-full " onClick={signupHandle}
+                          
+
+                          <Button className="p-4 rounded-full " onClick={loginHandle}
                           >
-                          Signup
+                          Login
                           </Button>
+  
 
-
+                          
                         </TabsContent>
 
-                        <TabsContent value="login"
-                          className="flex flex-col gap-5 mt-10"
+                        <TabsContent value="signup"
+                        className="flex flex-col gap-5 mt-10"
                         >
 
                           <Input placeholder="Email" className="rounded-full p-7"
@@ -145,13 +209,12 @@ const Auth = () => {
                           }}>
                           </Input>
 
-                          <Button className="p-4 rounded-full " onClick={loginHandle}
+                          <Button className="p-4 rounded-full " onClick={signupHandle}
                           >
-                          Login
+                          Signup
                           </Button>
-  
 
-                          
+
                         </TabsContent>
                         
                       </Tabs>

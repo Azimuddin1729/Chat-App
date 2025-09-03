@@ -10,7 +10,7 @@ const userSchema= new mongoose.Schema({
     password:{
         type:String,
         required:[true, 'Password required'],
-        minLength:[6, 'Password should be atleast og length 6']
+        minLength:[6, 'Password should be atleast of length 6']
     },
     firstName:{
         type:String,
@@ -43,7 +43,7 @@ userSchema.pre("save",async function (){
     this.password=await hash(this.password,salt);
 });
 
-const User=mongoose.model("Users",userSchema);
-exports.User={User};
+export const User=mongoose.model("Users",userSchema);
+// exports.User={User};
 //export default User
 

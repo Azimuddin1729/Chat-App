@@ -7,6 +7,8 @@ import { apiClient } from "@/lib/api-client";
 import { LOGIN_ROUTE, SIGNUP_ROUTE } from "@/utils/constants";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { userInfoAtom } from "@/store/authAtoms";
+import { useSetRecoilState } from "recoil";
 import { toast } from "sonner";
 
 const Auth = () => {
@@ -14,6 +16,9 @@ const Auth = () => {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const navigate= useNavigate();
+  
+
+  const setUserInfo= useSetRecoilState(userInfoAtom);
 
   function validateSignup(){
         if(!email.length){
@@ -51,8 +56,10 @@ const Auth = () => {
         });
         console.log(res.data.user);
         if(res.status===201){
+          setUserInfo(res.data.user)
           navigate("/profile");
         }
+
      }
      
      else{
@@ -65,6 +72,7 @@ const Auth = () => {
           const res=await apiClient.post(LOGIN_ROUTE,{email,password},{withCredentials:true})
           console.log(res);
           if(res.data.user.id){
+            setUserInfo(res.data.user)
             if(res.data.user.profileSetup){
               navigate("/chat");
             }
@@ -72,6 +80,9 @@ const Auth = () => {
               navigate("/profile")
             }
           }
+      }
+      else{
+        navigate("/auth");
       }
       
   }
@@ -180,7 +191,10 @@ const Auth = () => {
 
                           
                         </TabsContent>
-
+                        {/* could have used react-hook-forms or formik here they are better optimised here
+                         //with my approach any time user type something in any fields re rendering happens many times
+                         //but using the above lib forms are made very performants
+                         */}
                         <TabsContent value="signup"
                         className="flex flex-col gap-5 mt-10"
                         >

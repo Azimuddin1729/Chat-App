@@ -100,3 +100,36 @@ export async function login(req,res,next){ //
      return res.status(500).send("Server Error");
    }
 }
+
+export async function userinfo (req,res,next){
+   try{
+       console.log(req.userId);
+      const userData=await User.findById(req.userId);
+      if(!userData){
+        return res.status(404).send("User with given id not found");
+      }
+      
+
+      //  next();
+//201 for creating status and 200 for sending response ok
+        return res.status(200).json({
+           user:{
+            id:userData.id,
+            email:userData.email,
+            profileSetup:userData.profileSetup,
+            firstName:userData.firstName,
+            lastName:userData.lastName,
+            image:userData.image,
+            color:userData.color,
+           }
+        })
+       //these being sent but if the (not required field) are not put into databsse
+      //  then console log in client will be showing jsust the required three details
+
+   }
+   catch(e){
+     console.log(e);
+    //  console.log({e});
+     return res.status(500).send("Server Error");
+   }
+}

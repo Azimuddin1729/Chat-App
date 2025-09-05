@@ -11,6 +11,7 @@ const port=process.env.PORT||3003;
 const database_url=process.env.DATABASE_URL;
 
 const app= express();
+app.use(cookieParser());
 
 app.use(cors({
     origin:process.env.ORIGIN,

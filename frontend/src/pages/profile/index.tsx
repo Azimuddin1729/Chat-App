@@ -7,6 +7,10 @@ import { Avatar, AvatarImage } from "@/components/ui/avatar";
 import {FaPlus,FaTrash} from "react-icons/fa"
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import { toast } from "sonner";
+import { colors, getColor } from "@/lib/utils";
+import { apiClient } from "@/lib/api-client";
+import { UPDATE_PROFILE_ROUTE } from "@/utils/constants";
 
 const Profile = () => {
   const [userInfo,setUserInfo]=useRecoilState(userInfoAtom);
@@ -14,14 +18,45 @@ const Profile = () => {
   const [lastName, setLastName] = useState("");
   const [image, setImage] = useState(null);
   const [hovered, setHovered] = useState(false);
-  const [selectColor,setSelectColor]=useState(0);
+  const [selectedColor,setSelectedColor]=useState(0);
   const navigate=useNavigate();
+  
+ function validateProfile(){
+    if(!firstName){
+        toast.error("First Name is Required");
+        return false;
+      }
+      if (!lastName){
+           toast.error("Last Name is reuired")
 
+           return false;
+      }
+      return true;
+ }
   async function saveChanges(){
-      
+      if(validateProfile()){
+         try{
+           const res=await apiClient.put(UPDATE_PROFILE_ROUTE,{firstName,lastName,color:selectedColor},{withCredentials:true})
+
+           if(res.status===200&&res.data.user){
+              setUserInfo({...res.data.user})
+              toast.success("Profile Update Finished")
+              navigate("/chat");
+           }
+         }
+   
+         catch(e){
+            console.log(e);
+         }
+      }
+  }
+  if(!userInfo){
+    //  toast("please complete the authentication");
+    //  navigate("/auth"); 
+     return null;
   }
 
-  return (
+  return ( 
     <div className="bg-blue-200 h-[100vh] flex items-center justify-center flex-col gap-10">
 
       <div className="flex flex-col gap-10 v-[80vw] md:w-max">
@@ -38,9 +73,12 @@ const Profile = () => {
                    {
                    image? (<AvatarImage className="object-cover w-full h-full bg-black" src="image" alt="profile"/>)
                    :
-                    (<div className="uppercase h-32 w-40 md:w-48 md:h-48 text-5xl border-[1px] border-red-600
+                    (<div className={`uppercase h-32 w-40 md:w-48 md:h-48 text-5xl border-[1px] border-red-600
                    flex items-center justify-center rounded-full 
-                   bg-amber-300 ">
+                   bg-amber-300 text-red-900 
+                   ${getColor(selectedColor)}
+                   `}
+                   >
                     {
                     firstName ? firstName.split("").shift():
                     userInfo?.email.split("").shift()
@@ -93,9 +131,23 @@ const Profile = () => {
                  type="text" />
                </div>
 
-               {/* <div className="w-full flex gap-5">
+               <div className="w-full flex gap-5">
+                    {colors.map((color,index)=>(
+                      <div className={`${color} h-8 w-8 rounded-full cursor-pointer transition-all duration-300
 
-               </div> */}
+                        ${
+                        selectedColor===index? " outline-white outline-1":""
+                        }
+                      `
+                      }
+                       key={index}
+
+                       onClick={()=>setSelectedColor(index)}
+                      >
+                      
+                      </div>
+                    ))}
+               </div>
 
              </div>
 
@@ -114,6 +166,11 @@ const Profile = () => {
     </div>
   )
 
+}
+
+export default Profile
+
+
   // if(!userInfo){
   //     return <div>Please Login First</div>
   // }
@@ -124,6 +181,3 @@ const Profile = () => {
   //     </div>
   //   </div>
   // )
-}
-
-export default Profile

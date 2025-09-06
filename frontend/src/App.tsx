@@ -7,12 +7,14 @@ import Profile from './pages/profile'
 import {useRecoilState, useRecoilValue } from 'recoil'
 import { userInfoAtom } from './store/authAtoms'
 import { apiClient } from './lib/api-client'
-import { GET_USER_INFO } from './utils/constants'
+import { GET_USER_INFO_ROUTE } from './utils/constants'
 // import {Button} from "./components/ui/button"
 
 function PrivateRoute({children}:{children:ReactNode}){
+  // alert("Redirecting");
   const userInfo= useRecoilValue(userInfoAtom);
   if(!!userInfo){
+    console.log(userInfo);
     return children
   }
   else{
@@ -51,7 +53,7 @@ function App() {
   useEffect(()=>{
    async function getUserInfo(){
       try{
-        const res=await  apiClient.get(GET_USER_INFO,{
+        const res=await  apiClient.get(GET_USER_INFO_ROUTE,{
               withCredentials:true
         })
         if(res.status===200&&res.data.user.id){
@@ -64,7 +66,7 @@ function App() {
       }
       catch(e){
        setUserInfo(null);
-       console.log(e);
+      //  console.log(e);
       }
       finally{
         setLoading(false);

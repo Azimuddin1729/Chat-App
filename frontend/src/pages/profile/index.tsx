@@ -10,13 +10,13 @@ import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 import { colors, getColor } from "@/lib/utils";
 import { apiClient } from "@/lib/api-client";
-import { UPDATE_PROFILE_ROUTE } from "@/utils/constants";
+import { PROFILE_IMAGE_DELETE, PROFILE_IMAGE_ROUTE, SERVER, UPDATE_PROFILE_ROUTE } from "@/utils/constants";
 
 const Profile = () => {
   const [userInfo,setUserInfo]=useRecoilState(userInfoAtom);
   const [firstName, setFirstName] = useState<string|undefined>("");
   const [lastName, setLastName] = useState<string|undefined>("");
-  const [image, setImage] = useState(null);
+  const [image, setImage] = useState<string | undefined>(undefined);
   const [hovered, setHovered] = useState(false);
   const [selectedColor,setSelectedColor]=useState<number|undefined>(0);
   const navigate=useNavigate();
@@ -28,6 +28,9 @@ const Profile = () => {
         setFirstName(userInfo.firstName);
         setLastName(userInfo.lastName);
         setSelectedColor(userInfo.color);
+     }
+     if(userInfo?.image){
+       setImage(`${SERVER}/${userInfo.image}`)
      }
   },[userInfo]);
 
@@ -74,17 +77,56 @@ const Profile = () => {
     fileInputRef.current?.click();
   }
 
-  function addmodifyImage(e: React.ChangeEvent<HTMLInputElement>){  //or any
+  async function addmodifyImage(e: React.ChangeEvent<HTMLInputElement>){  //or any
      const file=e?.target.files?.[0];
-     console.log({file});
-     console.log(file);
+    //  console.log({file});
+    //  console.log(file);
+     if(file){
+
+        try{
+          const formData=new FormData();
+          formData.append("profile-img",file);
+          const res=await apiClient.put(PROFILE_IMAGE_ROUTE,formData,{withCredentials:true});
+
+          if(res.status===200&&res.data.image){
+            // console.log(res.data.image);
+            setUserInfo((prev) => prev ? { ...prev, image: res.data.image } : null);
+            toast.success("Profile Image Successfully Updated");
+          }
+
+          console.log(res.data.image,res.status);
+        }
+
+        catch(e){
+          console.log(e);
+        }
+
+     }
+
+     else{
+      //will this enter anytime ??
+      toast.error("Select a image from local")
+     }
+
   }
   // function imageChangeHandle(){
    
   // }
 
-  function deleteImage(){
+  async function deleteImage(){
+     try{
+        const res=await apiClient.delete(PROFILE_IMAGE_DELETE,{withCredentials:true});
 
+        if(res.status===200&&userInfo){
+          const {image,...rest}=userInfo;
+          setUserInfo(rest);
+          setImage(undefined);
+          toast.success("Profile Image Successfully removed")
+        }
+     }
+     catch(e){
+       console.log(e);
+     }
   }
 
   if(!userInfo){
@@ -111,7 +153,7 @@ const Profile = () => {
                 
                 <Avatar className="h-32 w-32 md:w-48 md:h-48 rounded-full overflow-hidden">
                    {
-                   image? (<AvatarImage className="object-cover w-full h-full bg-black" src="image" alt="profile"/>)
+                   image? (<AvatarImage className="object-cover w-full h-full bg-black" src={image} alt="profile"/>)
                    :
                     (<div className={`uppercase h-32 w-40 md:w-48 md:h-48 text-5xl border-[1px] border-red-600
                    flex items-center justify-center rounded-full 
@@ -143,7 +185,7 @@ const Profile = () => {
       
                 }
                   
-                <input type="file" ref={fileInputRef} className="hidden" onChange={addmodifyImage} name="profile-image" accept=".png, .jpeg ,.jpg, .svg ,.webp "/>
+                <input type="file" ref={fileInputRef} className="hidden" onChange={addmodifyImage} name="profile-img" accept=".png, .jpeg ,.jpg, .svg ,.webp "/>
              </div>
 
 

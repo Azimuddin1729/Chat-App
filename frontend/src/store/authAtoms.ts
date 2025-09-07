@@ -6,7 +6,7 @@ export type User = {
   firstName?: string;
   lastName?: string;
   color?: number;
-  image?:number;
+  image?:string;
 };
 
 export const userInfoAtom= atom<User|null>({

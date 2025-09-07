@@ -11,7 +11,7 @@ const port=process.env.PORT||3003;
 const database_url=process.env.DATABASE_URL;
 
 const app= express();
-app.use(cookieParser());
+
 
 app.use(cors({
     origin:process.env.ORIGIN,
@@ -19,7 +19,9 @@ app.use(cors({
     credentials: true
 }));
 
+app.use(cookieParser());
 app.use(express.json());
+app.use("/uploads/profiles",express.static("uploads/profiles"));
 
 app.use("/api/auth",authRouter);
 

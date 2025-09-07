@@ -1,6 +1,7 @@
 import { compare } from "bcrypt";
 import {User} from "../models/UserModel.js"
 import jwt from "jsonwebtoken"
+import {renameSync,unlinkSync} from "fs";
 
 const maxAge=24*60*60*1000;
 
@@ -168,4 +169,53 @@ export async function updateprofile(req,res,next){
     //  console.log({e});
      return res.status(500).send("Server Error");
    }
+}
+
+
+export async function profileimgadd(req,res,next){
+    try{
+
+      if(!req.file){
+        return res.status(400).send("File is required");
+      }
+
+      const date=Date.now();
+      const fileName="uploads/profiles/"+date+req.file.originalname;
+      renameSync(req.file.path,fileName); 
+
+      //renaming from the auto generate file name to our ones
+
+      const user=await User.findByIdAndUpdate(req.userId ,{image:fileName},{new:true},{runValidators:true})
+      // console.log(user.image);
+      return res.status(200).json({image:user.image});
+  }
+  catch(e){
+     console.log(e);
+    //  console.log({e});
+     return res.status(500).send("Server Error");
+   }
+}
+
+export async function profileimgremove(req,res,next){
+   try{
+      
+      const user=await User.findById(req.userId);
+      if(!user){
+         return res.status(404).send("User not found");
+      }
+      if(user.image){
+        unlinkSync(user.image);
+      }
+      user.image=null;
+      await user.save();
+      return res.status(200).send("Profile Image removed")
+
+   }
+
+   catch(e){
+     console.log(e);
+    //  console.log({e});
+     return res.status(500).send("Server Error");
+   }
+     
 }

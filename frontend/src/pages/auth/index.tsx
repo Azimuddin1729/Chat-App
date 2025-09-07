@@ -47,6 +47,8 @@ const Auth = () => {
           return false;
         }
         return true;  
+
+        //one more thing to check whether the user exists in database  i am doing that in the handle itself right now
   }
   async function signupHandle(){
      if(validateSignup()){
@@ -69,6 +71,8 @@ const Auth = () => {
 
   async function loginHandle(){
       if(validateLogin()){
+        
+         try{
           const res=await apiClient.post(LOGIN_ROUTE,{email,password},{withCredentials:true})
           console.log(res);
           if(res.data.user.id){
@@ -80,6 +84,11 @@ const Auth = () => {
               navigate("/profile")
             }
           }
+        }
+         catch(e){
+            toast("Given User Not Found")
+            console.log("User doesn't exist")
+         }
       }
       else{
         navigate("/auth");

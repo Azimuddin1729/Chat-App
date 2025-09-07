@@ -1,8 +1,8 @@
 import { userInfoAtom } from "@/store/authAtoms";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useRecoilState } from "recoil";
-import {IoArrowBack} from "react-icons/io5"
+import { IoArrowForward} from "react-icons/io5"
 import { Avatar, AvatarImage } from "@/components/ui/avatar";
 import {FaPlus,FaTrash} from "react-icons/fa"
 import { Input } from "@/components/ui/input";
@@ -14,13 +14,23 @@ import { UPDATE_PROFILE_ROUTE } from "@/utils/constants";
 
 const Profile = () => {
   const [userInfo,setUserInfo]=useRecoilState(userInfoAtom);
-  const [firstName, setFirstName] = useState("");
-  const [lastName, setLastName] = useState("");
+  const [firstName, setFirstName] = useState<string|undefined>("");
+  const [lastName, setLastName] = useState<string|undefined>("");
   const [image, setImage] = useState(null);
   const [hovered, setHovered] = useState(false);
-  const [selectedColor,setSelectedColor]=useState(0);
+  const [selectedColor,setSelectedColor]=useState<number|undefined>(0);
   const navigate=useNavigate();
+  const fileInputRef= useRef<HTMLInputElement>(null);
   
+  //if user directs it to profile then if the contents of userinfo from backend is already true then show it in input box as well
+  useEffect(()=>{
+     if(userInfo?.profileSetup){
+        setFirstName(userInfo.firstName);
+        setLastName(userInfo.lastName);
+        setSelectedColor(userInfo.color);
+     }
+  },[userInfo]);
+
  function validateProfile(){
     if(!firstName){
         toast.error("First Name is Required");
@@ -50,18 +60,48 @@ const Profile = () => {
          }
       }
   }
+
+  function gotoChat(){
+    if(userInfo?.profileSetup){
+      navigate("/chat");
+    }
+    else{
+      toast.error("Complete the Profile");
+    }
+  }
+
+  function inputFileClickHandle(){
+    fileInputRef.current?.click();
+  }
+
+  function addmodifyImage(e: React.ChangeEvent<HTMLInputElement>){  //or any
+     const file=e?.target.files?.[0];
+     console.log({file});
+     console.log(file);
+  }
+  // function imageChangeHandle(){
+   
+  // }
+
+  function deleteImage(){
+
+  }
+
   if(!userInfo){
     //  toast("please complete the authentication");
     //  navigate("/auth"); 
      return null;
   }
 
+  //profile update we may check if details is exactly the same as before 
+
   return ( 
     <div className="bg-blue-200 h-[100vh] flex items-center justify-center flex-col gap-10">
 
       <div className="flex flex-col gap-10 v-[80vw] md:w-max">
          <div>
-            <IoArrowBack className="text-4xl lg:text-6xl text-white/90 cursor-pointer"/>
+            <IoArrowForward className="text-4xl lg:text-6xl text-white/90 cursor-pointer"
+            onClick={gotoChat}/>
          </div>
 
          <div className="grid grid-cols-2">
@@ -91,15 +131,19 @@ const Profile = () => {
 
                 {hovered&&
                   (
-                    <div className="absolute inset-0 flex items-center justify-center bg-black/50 cursor-pointer rounded-full" >
+                    <div className="absolute inset-0 flex items-center justify-center bg-black/50 cursor-pointer rounded-full " onClick={image? deleteImage:inputFileClickHandle} >
 
-                     {image? <FaTrash className="text-white cursor-pointer text-3xl"/>:<FaPlus className="text-white cursor-pointer text-3xl"/>}
+                     {image? <FaTrash className="text-white cursor-pointer text-3xl"/>:
+                    
+                    (<FaPlus className="text-white cursor-pointer text-3xl"/>
+                    )}
 
                     </div>
                   )
       
                 }
-                   {/*  */}
+                  
+                <input type="file" ref={fileInputRef} className="hidden" onChange={addmodifyImage} name="profile-image" accept=".png, .jpeg ,.jpg, .svg ,.webp "/>
              </div>
 
 

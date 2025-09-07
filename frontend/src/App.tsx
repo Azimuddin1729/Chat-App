@@ -14,7 +14,7 @@ function PrivateRoute({children}:{children:ReactNode}){
   // alert("Redirecting");
   const userInfo= useRecoilValue(userInfoAtom);
   if(!!userInfo){
-    console.log(userInfo);
+    // console.log(userInfo);
     return children
   }
   else{
@@ -48,8 +48,12 @@ function App() {
   const [userInfo,setUserInfo]=useRecoilState(userInfoAtom);
 
   const [loading, setLoading] = useState(true);
-
   
+  console.log(userInfo,loading);
+//   useEffect(() => {
+//   console.log("userInfo changed:", userInfo);
+// }, [userInfo]);
+
   useEffect(()=>{
    async function getUserInfo(){
       try{
@@ -69,7 +73,12 @@ function App() {
       //  console.log(e);
       }
       finally{
+        // setLoading(false);
         setLoading(false);
+        // await new Promise((resolve)=>{
+        //   setTimeout(resolve,5000)
+        // })
+        // setLoading(false);
       }
     }
 
@@ -78,9 +87,10 @@ function App() {
     }
     else{
       setLoading(false);
+
     }
      
-  },[setUserInfo,setLoading])
+  },[userInfo,loading])
 
 
   if(loading){

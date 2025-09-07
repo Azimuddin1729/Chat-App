@@ -28,9 +28,14 @@ export const colors=
 //                    bg-fuchsia-950 text-lime-500
 
 
-export function getColor(color:number){
-  if(color>=0&&color<colors.length){
+export function getColor(color:number|undefined){
+  if(color===undefined){
+     return colors[0];
+  }
+  else{
+   if(color>=0&&color<colors.length){
     return colors[color];
+   }
   }
   return colors[0];
 }

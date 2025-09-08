@@ -182,7 +182,6 @@ export async function profileimgadd(req,res,next){
       const date=Date.now();
       const fileName="uploads/profiles/"+date+req.file.originalname;
       renameSync(req.file.path,fileName); 
-
       //renaming from the auto generate file name to our ones
 
       const user=await User.findByIdAndUpdate(req.userId ,{image:fileName},{new:true},{runValidators:true})

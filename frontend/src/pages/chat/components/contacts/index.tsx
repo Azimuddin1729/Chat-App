@@ -24,7 +24,7 @@ export default ContactsContainer
 const Logo=()=>{
 
   return (
-    <div className="flex  justify-start items-center gap-2">
+    <div className="flex justify-start items-center gap-2">
         <svg xmlns="http://www.w3.org/2000/svg" width="360" height="120" viewBox="0 0 360 120" fill="none">
           {/* <!-- Background --> */}
           <rect width="360" height="120" rx="16" fill="#0f172a"/>

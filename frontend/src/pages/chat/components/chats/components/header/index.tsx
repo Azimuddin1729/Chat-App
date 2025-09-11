@@ -9,8 +9,8 @@ const Header = () => {
          </div>
 
          <div className="flex gap-3 items-center justify-center">
-            <button className="text-neutral-500 focus:outline-none focus:border-none
-            hover:text-white duration-300 transition-all cursor-pointer">
+            <button className="text-neutral-500 focus:outline-none focus:border-white focus:border-2
+            hover:text-white duration-300 transition-all cursor-pointer border-none">
                 <RiCloseFill className="text-3xl"/>
             </button>
          </div>

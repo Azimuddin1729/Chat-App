@@ -28,6 +28,7 @@ const Chat = () => {
     // }
 
   },[navigate,userInfo]);
+  
    
   return (
     <div className="flex h-[100vh] relative text-white overflow-hidden ">

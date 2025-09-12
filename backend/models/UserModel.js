@@ -38,9 +38,12 @@ const userSchema= new mongoose.Schema({
 
 //applying a middleware before saving
 //
-userSchema.pre("save",async function (){
+userSchema.pre("save",async function (next){
+    //skip if password is not modified
+    // if (!this.isModified("password")) return next();
     const salt = await genSalt();
     this.password=await hash(this.password,salt);
+    next();
 });
 
 export const User=mongoose.model("Users",userSchema);

@@ -1,6 +1,6 @@
 
 import express from "express"
-import {login, signup,userinfo,updateprofile,profileimgadd,profileimgremove} from "../controllers/AuthController.js"
+import {login, signup,userinfo,updateprofile,profileimgadd,profileimgremove, logout} from "../controllers/AuthController.js"
 import { checkToken } from "../middlewares/AuthMiddleware.js";
 import multer from "multer";
 
@@ -18,3 +18,5 @@ authRouter.put("/profile-update",checkToken,updateprofile)
 authRouter.put("/profile-img-add",checkToken,upload.single("profile-img"),profileimgadd) 
 
 authRouter.delete("/profile-img-remove",checkToken,profileimgremove);
+
+authRouter.post("/logout",logout)

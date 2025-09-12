@@ -86,7 +86,7 @@ const Auth = () => {
           }
         }
          catch(e){
-            toast("Given User Not Found")
+            toast.error("Given User Not Found")
             console.log("User doesn't exist")
          }
       }

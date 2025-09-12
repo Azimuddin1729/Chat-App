@@ -10,3 +10,5 @@ export const UPDATE_PROFILE_ROUTE=`${AUTH_ROUTES}/profile-update`
 export const PROFILE_IMAGE_ROUTE=`${AUTH_ROUTES}/profile-img-add`
 
 export const PROFILE_IMAGE_DELETE=`${AUTH_ROUTES}/profile-img-remove`
+
+export const LOGOUT_ROUTE=`${AUTH_ROUTES}/logout`

@@ -16,6 +16,7 @@ const Profile = () => {
   const [userInfo,setUserInfo]=useRecoilState(userInfoAtom);
   const [firstName, setFirstName] = useState<string|undefined>("");
   const [lastName, setLastName] = useState<string|undefined>("");
+  //this image is with the server port included  while in userinfo that is without that
   const [image, setImage] = useState<string | undefined>(undefined);
   const [hovered, setHovered] = useState(false);
   const [selectedColor,setSelectedColor]=useState<number|undefined>(0);

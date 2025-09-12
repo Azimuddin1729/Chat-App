@@ -218,3 +218,26 @@ export async function profileimgremove(req,res,next){
    }
      
 }
+
+
+export async function logout(req,res,next){
+   try{
+      res.cookie("jwt","",
+        {
+          maxAge:1,
+          secure:true,
+          sameSite:"none",
+          httpOnly:true
+
+        })
+      return res.status(200).send("Logout Succesfully")
+
+   }
+
+   catch(e){
+     console.log(e);
+    //  console.log({e});
+     return res.status(500).send("Server Error");
+   }
+     
+}

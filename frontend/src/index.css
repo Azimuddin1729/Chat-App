@@ -44,6 +44,11 @@
   --color-sidebar-ring: var(--sidebar-ring);
 }
 
+@theme {
+      --color-light-100: #cecefb;
+      --breakpoint-xss: 70px;
+      --breakpoint-xs:500px;
+}
 :root {
   --radius: 0.625rem;
   --background: oklch(1 0 0);

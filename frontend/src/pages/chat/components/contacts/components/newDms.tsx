@@ -24,6 +24,11 @@ import { Avatar, AvatarImage } from "@/components/ui/avatar"
 
 import { getColor } from "@/lib/utils"
 
+// import { useRecoilValue, useSetRecoilState } from "recoil";
+// import { selectedChatTypeAtom, selectedChatDataAtom, selectedChatMessagesAtom } from "./chatAtoms";
+// import { useChatActions} from "../../../../../store/useChatHooks.js"
+import { useChatActions} from "@/store/useChatHooks.js"
+
 type Contact = {
   _id: string;
   firstName?: string;
@@ -41,6 +46,19 @@ const NewDm = () => {
 
    const [hasSearched, setHasSearched] = useState(false);
 
+//    const setselectedChatType=useSetRecoilState(selectedChatTypeAtom);
+//    const selectedChatData=useRecoilValue(selectedChatDataAtom);
+
+   const { setChatType, setChatData, setChatMessages, closeChat } = useChatActions();
+
+   function selectNewContact(contact:any){
+         setOpenNewContacts(false);
+         setChatType("contact");
+         
+         setChatData(contact);
+         
+         setSearchedContacts([]);
+   }
 
    async function searchContacts(searchTerm:string){
       try{
@@ -110,7 +128,7 @@ const NewDm = () => {
                     {
                         searchedContacts.map((contact)=>(
                           <div key={contact._id} className="flex gap-3 items-center
-                          cursor-pointer">  
+                          cursor-pointer" onClick={()=>selectNewContact(contact)}>  
 
                              <div className="relative h-12 w-12 ">
                                     <Avatar className="h-12 w-12  rounded-full overflow-hidden">

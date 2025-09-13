@@ -3,14 +3,14 @@ import ProfileInfo from "./components/profileinfo"
 
 const ContactsContainer = () => {
   return (
-    <div className="relative w-full md:w-[35vw] lg:w-[30vw] xl:w-[30vw] bg-[#090a16] border-r-3 border-[#011d39] ">
+    <div className="relative w-full xs:w-[280px] lg:w-[300px] xl:w-[320px] bg-[#090a16] border-r border-[#011d39]">
       <div className="flex items-center justify-center ">
           <Logo />
       </div>
       
 
       <div className="my-5">
-        <div className="flex items-center justify-between sm:px-10 ">
+        <div className="flex items-center justify-between px-10 ">
            <Title text="Direct Messages"/>
              
            <NewDm/>
@@ -18,7 +18,7 @@ const ContactsContainer = () => {
       </div>
 
       <div className="my-5">
-        <div className="flex items-center justify-between sm:px-10">
+        <div className="flex items-center justify-between px-10">
            <Title text="Channels"/>
         </div>
       </div>
@@ -35,11 +35,11 @@ export default ContactsContainer
 const Logo = () => {
   return (
     <div className="w-full flex justify-center items-center">
-      <svg
+      <svg 
         xmlns="http://www.w3.org/2000/svg"
         viewBox="0 0 360 120"
         preserveAspectRatio="xMidYMid meet"
-        className="w-full max-w-[220px] h-auto"
+        className="w-[280px] xs:w-[198px] sm:w-[200px] lg:w-[220px] h-auto"
       >
         {/* Background */}
         <rect width="360" height="120" rx="16" fill="#0f172a" />

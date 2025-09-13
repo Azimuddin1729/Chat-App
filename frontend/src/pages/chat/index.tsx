@@ -6,11 +6,17 @@ import { toast } from "sonner";
 import ContactsContainer from "./components/contacts";
 import EmptyChatContainer from "./components/empty-chat";
 import ChatContainer from "./components/chats";
+import { selectedChatTypeAtom } from "@/store/chatAtoms";
+// import { useChatActions} from "@/store/useChatHooks.js"
 
 
 const Chat = () => {
   const userInfo= useRecoilValue(userInfoAtom);
   const navigate=useNavigate();
+   
+  const chatType = useRecoilValue(selectedChatTypeAtom);
+  // const { setChatType, setChatData, setChatMessages, closeChat } = useChatActions();
+
   
   useEffect(()=>{
     // if(!userInfo?.profileSetup){
@@ -33,8 +39,12 @@ const Chat = () => {
   return (
     <div className="flex h-[100vh] relative text-white overflow-hidden ">
       <ContactsContainer/>
-      {/* <EmptyChatContainer/> */}
-      {/* <ChatContainer/> */}
+      {
+        chatType===undefined?
+        <EmptyChatContainer/>:
+        <ChatContainer/>
+      }
+      
     </div>
   )
 }

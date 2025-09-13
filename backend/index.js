@@ -5,6 +5,7 @@ import cors from "cors"
 import cookieParser from "cookie-parser";
 import mongoose from "mongoose";
 import { authRouter } from "./routes/AuthRoute.js";
+import { contactRouter } from "./routes/ContactsRoute.js";
 
 dotenv.config();
 const port=process.env.PORT||3003;
@@ -24,6 +25,7 @@ app.use(express.json());
 app.use("/uploads/profiles",express.static("uploads/profiles"));
 
 app.use("/api/auth",authRouter);
+app.use("/api/contacts",contactRouter);
 
 app.listen(port,()=>{
     console.log(`server is started at http://localhost:${port}`)

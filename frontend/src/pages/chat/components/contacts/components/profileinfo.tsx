@@ -10,6 +10,9 @@ import { useNavigate } from "react-router-dom";
 import { IoLogOut, IoPowerSharp } from "react-icons/io5";
 import { apiClient } from "@/lib/api-client";
 
+import { getColor } from "@/lib/utils";
+
+
 const ProfileInfo = () => {
   const [userInfo,setUserInfo]= useRecoilState(userInfoAtom);
   const navigate=useNavigate();
@@ -28,7 +31,7 @@ const ProfileInfo = () => {
       }
   }
   return (
-    <div className="absolute bottom-4 h-14 flex items-center justify-center px-4 w-full bg-[rgb(0,113,117)]"
+    <div className="absolute bottom-0 h-16 flex items-center justify-center px-4 w-full bg-[rgb(0,113,117)] rounded-md"
     >
        <div className="flex gap-9 items-center justify-center">
             
@@ -39,10 +42,7 @@ const ProfileInfo = () => {
                     
                   alt="profile"/>)
                    :
-                    (<div className={`uppercase h-12 w-40 text-lg border-[1px] border-red-600
-                   flex items-center justify-center rounded-full 
-                   bg-amber-300 text-red-900 
-                   ${userInfo?.color}`
+                    (<div className={`uppercase h-12 w-12 text-lg flex items-center justify-center rounded-full ${getColor(userInfo?.color)}`
                   }
                    >
                     {
@@ -67,7 +67,8 @@ const ProfileInfo = () => {
 
        </div>
 
-       <div className="flex">
+       <div className="flex items-center justify-between ">
+
             <Tooltip>
                 <TooltipTrigger>
                   <FiEdit2  
@@ -79,8 +80,6 @@ const ProfileInfo = () => {
               </TooltipContent>
             </Tooltip>
 
-
-
              <Tooltip>
                 <TooltipTrigger>
                   <IoPowerSharp  
@@ -91,9 +90,9 @@ const ProfileInfo = () => {
                 <p>Logout</p>
               </TooltipContent>
             </Tooltip>
+
+
        </div>
-
-
     </div>
   )
 }

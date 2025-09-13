@@ -1,19 +1,24 @@
+import NewDm from "./components/newDms";
 import ProfileInfo from "./components/profileinfo"
 
 const ContactsContainer = () => {
   return (
-    <div className="relative w-full md:w-[35vw] lg:w-[30vw] xl:w-[20vw] bg-[#090a16] border-r-3 border-[#011d39] ">
-
-      <Logo/>
+    <div className="relative w-full md:w-[35vw] lg:w-[30vw] xl:w-[30vw] bg-[#090a16] border-r-3 border-[#011d39] ">
+      <div className="flex items-center justify-center ">
+          <Logo />
+      </div>
+      
 
       <div className="my-5">
-        <div className="flex items-center justify-center pr-10">
+        <div className="flex items-center justify-between sm:px-10 ">
            <Title text="Direct Messages"/>
+             
+           <NewDm/>
         </div>
       </div>
 
       <div className="my-5">
-        <div className="flex items-center justify-center pr-10">
+        <div className="flex items-center justify-between sm:px-10">
            <Title text="Channels"/>
         </div>
       </div>
@@ -29,18 +34,17 @@ export default ContactsContainer
 
 const Logo = () => {
   return (
-    <div className="flex justify-center items-center">
+    <div className="w-full flex justify-center items-center">
       <svg
         xmlns="http://www.w3.org/2000/svg"
-        width="360"
-        height="120"
         viewBox="0 0 360 120"
-        fill="none"
+        preserveAspectRatio="xMidYMid meet"
+        className="w-full max-w-[220px] h-auto"
       >
         {/* Background */}
         <rect width="360" height="120" rx="16" fill="#0f172a" />
 
-        {/* Orbiting Sync Orbs (left) */}
+        {/* Orbiting Sync Orbs */}
         <g transform="translate(60,60)">
           <circle r="8" fill="#ffffff" opacity="0.95" />
           <circle r="20" fill="none" stroke="#334155" strokeWidth="1.5" />
@@ -76,7 +80,7 @@ const Logo = () => {
           </circle>
         </g>
 
-        {/* SyncTalk text (right) */}
+        {/* Text */}
         <text
           x="130"
           y="68"
@@ -88,7 +92,7 @@ const Logo = () => {
           SyncTalk
         </text>
 
-        {/* Gradient for text */}
+        {/* Gradient */}
         <defs>
           <linearGradient id="grad" x1="0" y1="0" x2="1" y2="1">
             <stop offset="0%" stopColor="#6366f1" />

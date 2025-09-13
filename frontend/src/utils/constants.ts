@@ -12,3 +12,7 @@ export const PROFILE_IMAGE_ROUTE=`${AUTH_ROUTES}/profile-img-add`
 export const PROFILE_IMAGE_DELETE=`${AUTH_ROUTES}/profile-img-remove`
 
 export const LOGOUT_ROUTE=`${AUTH_ROUTES}/logout`
+
+export const CONTACTS_ROUTES="/api/contacts"
+
+export const SEARCH_CONTACTS_ROUTE=`${CONTACTS_ROUTES}/search`

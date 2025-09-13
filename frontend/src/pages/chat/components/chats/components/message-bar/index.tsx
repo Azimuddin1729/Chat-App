@@ -36,7 +36,7 @@ const MessageBar = () => {
     },[])
 
   return (
-    <div className="h-[10vh] bg-[#1b1d25] flex items-center justify-center mb-2 py-4 ">
+    <div className="h-16  bg-[#1b1d25] flex items-center justify-center ">
       {/* MessageBar */}
       <div className="flex-1 flex bg-[#123456] items-center gap-5 pr-5 rounded-md">
          <input placeholder="Type Your Message" type="text" className="flex-1 p-6 bg-transparent  rounded-md focus:border-none focus:outline-none

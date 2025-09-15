@@ -22,21 +22,46 @@ export function SocketProvider({children}:{children:ReactNode}){
      const selectedChatData=useRecoilValue(selectedChatDataAtom);
      const selectedChatType=useRecoilValue(selectedChatTypeAtom);
      const{addMessage}=useChatActions();
+        
+    
 
+     useEffect(()=>{
 
-    //  useEffect(()=>{
-
-        if(userInfo){
+        if(userInfo?.id){
             socketRef.current=io(SERVER,{
                 withCredentials:true,
                 query:{userId:userInfo.id}
             })
 
+        //    console.log("inside the if condiion socket contains this:" ,socketRef.current);
+
             socketRef.current?.on("connect",()=>{
                 console.log("Connection Successful with the Server")
             })
+        }
 
-            function messagecomingHandle(message:any){
+        
+        return ()=>{
+            socketRef.current?.disconnect()
+        }
+        
+     },
+     [userInfo?.id]);//
+
+
+     //make a socket per new user only 
+     
+
+     //for other activities using the formed socket:
+     useEffect(()=>{
+         console.log("socket contains this:" ,socketRef.current);
+         console.log(selectedChatData,selectedChatType)
+
+        // if(!socketRef.current){
+        //     return;
+        // }
+
+        function messagecomingHandle(message:any){
                 //we check if user who is trying to send messages and the receiver has actually seeing his/her chat currently !!!
                 console.log(selectedChatData,selectedChatType)
 
@@ -44,19 +69,11 @@ export function SocketProvider({children}:{children:ReactNode}){
                     console.log("msg recieved" ,message);
                     addMessage(message);
                 }
-            }
-
-            socketRef.current?.on("receiveMessage",messagecomingHandle);
-
-
-            return ()=>{
-              socketRef.current?.disconnect()
-            }
-
         }
-        
-    //  },
-    //  [userInfo]);
+
+        socketRef.current?.on("receiveMessage",messagecomingHandle);
+
+     },[selectedChatData,selectedChatType,addMessage])
      
      return (
         <SocketContext.Provider value={socketRef}> 

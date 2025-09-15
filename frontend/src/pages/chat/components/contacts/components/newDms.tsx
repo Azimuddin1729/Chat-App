@@ -49,7 +49,7 @@ const NewDm = () => {
 //    const setselectedChatType=useSetRecoilState(selectedChatTypeAtom);
 //    const selectedChatData=useRecoilValue(selectedChatDataAtom);
 
-   const { setChatType, setChatData, setChatMessages, closeChat } = useChatActions();
+   const { setChatType, setChatData } = useChatActions();
 
    function selectNewContact(contact:any){
          setOpenNewContacts(false);

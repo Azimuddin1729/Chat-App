@@ -16,3 +16,6 @@ export const selectedChatMessagesAtom = atom<any[]>({
 });
 //message/conversations related to that user //with me
 
+
+
+// selector

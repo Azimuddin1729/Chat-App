@@ -1,4 +1,5 @@
 import { Server } from "socket.io";
+import Message from "./models/MessagesModel.js";
 
 function setupSocket(server){
    const io= new Server(server,{
@@ -22,8 +23,27 @@ function setupSocket(server){
             console.log("User ID not given")
         }
 
-     socket.on("disconnect",(socket)=>{
-        console.log(`Client disconnected : ${socket.id}`)
+
+     socket.on("sendMessage",async (message)=>{
+        const senderSocketId=userSocketMap.get(message.sender)
+        const receiverSocketId=userSocketMap.get(message.recipient)
+        
+        const createMessage=await Message.create(message)
+
+        const messageData=await Message.findById(createMessage._id).populate("sender","_id email firstName lastName image color").populate("recipient","_id email firstName lastName image color")
+
+        console.log(messageData);
+
+        if(receiverSocketId){
+            io.to(receiverSocketId).emit("receiveMessage",messageData)
+        }
+        if(senderSocketId){
+            io.to(senderSocketId).emit("receiveMessage",messageData)
+        }
+
+     })
+     socket.on("disconnect",(reason)=>{
+        console.log(`Client disconnected : ${socket.id},reason: ${reason}`)
         for(const[userId,socketId] of userSocketMap.entries()){
             if(socket.id===socketId){
                 userSocketMap.delete(userId);
@@ -32,8 +52,8 @@ function setupSocket(server){
         }
      })
 
-
    })
 }
+
 
 export default setupSocket

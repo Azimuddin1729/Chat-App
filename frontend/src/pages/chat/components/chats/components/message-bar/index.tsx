@@ -3,13 +3,33 @@ import {GrAttachment} from "react-icons/gr"
 import { IoSend } from "react-icons/io5";
 import { RiEmojiStickerLine } from "react-icons/ri";
 import EmojiPicker,{Theme} from "emoji-picker-react"
-const MessageBar = () => {
+import { useRecoilValue } from "recoil";
+import { selectedChatDataAtom, selectedChatTypeAtom } from "@/store/chatAtoms";
+import { useSocket } from "@/context/SocketContext";
+import { userInfoAtom } from "@/store/authAtoms";
 
+
+const MessageBar = () => {
+    
     const [msg, setMsg] = useState("");
     const emojiRef=useRef<HTMLDivElement>(null);
-    
+    const selectedChatType=useRecoilValue(selectedChatTypeAtom);
+    const selectedChatData=useRecoilValue(selectedChatDataAtom);
+    const userInfo=useRecoilValue(userInfoAtom);
+    const socket=useSocket();
     const [emojiPickerOpen, setEmojiPickerOpen] = useState(false)
+
+
     async function sendMessageHandle(){
+       if(selectedChatType==="contact"){
+           socket?.current?.emit("sendMessage",{
+              sender:userInfo?.id,
+              content:msg,
+              recipient:selectedChatData._id,//since i am not selecting id too so default _id from backend
+              messageType:"text",
+              fileUrl:undefined,
+           })
+       }
       
     }
     async function sendEmojiHandle(emoji:any){
@@ -74,9 +94,6 @@ const MessageBar = () => {
           < IoSend className="text-2xl "/>
           {/*  flex is best for centering insrtead of doing pl , pr ,px,py,pt,pb */}
         </button>
-
-
-
     </div>
   )
 }

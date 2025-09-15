@@ -1,4 +1,4 @@
-import { useSetRecoilState, useResetRecoilState } from "recoil";
+import { useSetRecoilState, useResetRecoilState, useRecoilValue } from "recoil";
 import { selectedChatTypeAtom, selectedChatDataAtom, selectedChatMessagesAtom } from "./chatAtoms";
 
 export function useChatActions() {
@@ -12,7 +12,10 @@ export function useChatActions() {
   const resetChatType = useResetRecoilState(selectedChatTypeAtom);
   const resetChatData = useResetRecoilState(selectedChatDataAtom);
   const resetChatMessages = useResetRecoilState(selectedChatMessagesAtom);
- 
+
+
+  const chatType = useRecoilValue(selectedChatTypeAtom);
+  const chatMessages = useRecoilValue(selectedChatMessagesAtom);
 
   //resetting function
   const closeChat = () => {
@@ -21,11 +24,22 @@ export function useChatActions() {
     resetChatMessages();
   };
 
+  const addMessage=(message:any)=>{
+    setChatMessages((prev)=>[...prev,{
+         ...message,
+         recipient:chatType==="channel"? message.recipient:message.recipient?._id,
+         sender: chatType === "channel" ? message.sender : message.sender?._id
+
+         //for channel we want to show profile pic name etc thats why all things needed but for direct only id is sufficient 
+       
+    }])
+  }
 
   return {
     setChatType,      
     setChatData,      
     setChatMessages,   
-    closeChat,        
+    closeChat,    
+    addMessage,    
   };
 }

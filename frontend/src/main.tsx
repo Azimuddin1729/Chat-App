@@ -4,12 +4,16 @@ import './index.css'
 import App from './App.tsx'
 import { Toaster } from 'sonner'
 import { RecoilRoot } from 'recoil'
+import { SocketProvider } from './context/SocketContext.tsx'
 
 createRoot(document.getElementById('root')!).render(
   // <StrictMode>
+
     <RecoilRoot>
-      <App />
-      <Toaster closeButton/>
+       <SocketProvider>
+          <App />
+          <Toaster closeButton/>
+       </SocketProvider>   
     </RecoilRoot>
   // </StrictMode>
 )

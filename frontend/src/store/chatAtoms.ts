@@ -16,6 +16,12 @@ export const selectedChatMessagesAtom = atom<any[]>({
 });
 //message/conversations related to that user //with me
 
+export const directMessagesContactsAtom=atom<any[]>
+({
+  key:"directMessagesContacts",
+  default:[]
+})
+
 
 
 // selector

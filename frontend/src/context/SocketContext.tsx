@@ -54,7 +54,11 @@ export function SocketProvider({children}:{children:ReactNode}){
 
      //for other activities using the formed socket:
      useEffect(()=>{
-         console.log("socket contains this:" ,socketRef.current);
+
+        const socket = socketRef.current;
+        if (!socket) return;
+
+         console.log("socket contains this:" ,socket);
          console.log(selectedChatData,selectedChatType)
 
         // if(!socketRef.current){
@@ -62,7 +66,7 @@ export function SocketProvider({children}:{children:ReactNode}){
         // }
 
         function messagecomingHandle(message:any){
-                //we check if user who is trying to send messages and the receiver has actually seeing his/her chat currently !!!
+                //we check if user who is trying to send messages and the receiver has actually been seeing his/her chat currently !!
                 console.log(selectedChatData,selectedChatType)
 
                 if(selectedChatType!==undefined&&(selectedChatData._id===message.sender._id||selectedChatData._id===message.recipient._id)){
@@ -71,7 +75,11 @@ export function SocketProvider({children}:{children:ReactNode}){
                 }
         }
 
-        socketRef.current?.on("receiveMessage",messagecomingHandle);
+        socket.on("receiveMessage",messagecomingHandle);
+
+        return () => {
+            socket.off("receiveMessage", messagecomingHandle);
+        };
 
      },[selectedChatData,selectedChatType,addMessage])
      

@@ -125,6 +125,19 @@
   body {
     @apply bg-background text-foreground;
   }
+
+  
+}
+
+@layer utilities {
+  /* Hide scrollbars but keep scrolling */
+  .scrollbar-hidden {
+    -ms-overflow-style: none;  /* IE/Edge */
+    scrollbar-width: none;     /* Firefox */
+  }
+  .scrollbar-hidden::-webkit-scrollbar {
+    display: none;             /* Chrome/Safari */
+  }
 }
 
 .poppins-extralight {

@@ -1,7 +1,34 @@
+import { useEffect } from "react";
 import NewDm from "./components/newDms";
 import ProfileInfo from "./components/profileinfo"
+import { apiClient } from "@/lib/api-client";
+import { GET_DMCONTACTS_ROUTE } from "@/utils/constants";
+import { directMessagesContactsAtom } from "@/store/chatAtoms";
+import { useRecoilState } from "recoil";
+import ContactList from "@/components/contactsList";
 
 const ContactsContainer = () => {
+  const [directMessagesContacts,setdirectMessagesContacts]= useRecoilState(directMessagesContactsAtom)
+
+  useEffect(()=>{
+        async function getContacts(){
+          try{
+           const res=await apiClient.get(GET_DMCONTACTS_ROUTE,{withCredentials:true})
+
+           if(res.data.contacts){
+            // console.log(res.data.contacts);
+            setdirectMessagesContacts(res.data.contacts);
+           }
+          }
+          catch(e){
+            console.log(e);
+          }
+        }
+        getContacts()
+  },[]);
+
+
+
   return (
     <div className="relative w-full xs:w-[280px] lg:w-[300px] xl:w-[320px] bg-[#090a16] border-r border-[#011d39]">
       <div className="flex items-center justify-center ">
@@ -14,6 +41,9 @@ const ContactsContainer = () => {
            <Title text="Direct Messages"/>
              
            <NewDm/>
+        </div>
+        <div className="max-h-[30vh] overflow-y-auto scrollbar-hidden">
+          <ContactList contacts={directMessagesContacts}/>
         </div>
       </div>
 

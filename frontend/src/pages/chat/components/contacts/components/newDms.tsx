@@ -153,7 +153,7 @@ const NewDm = () => {
 
                                <div className="flex flex-col">
                                   <div>
-                                    {contact.firstName&&contact.lastName? `${contact.firstName} ${contact.lastName}`:`${contact.email}`}
+                                    {(contact.firstName&&contact.lastName)? `${contact.firstName} ${contact.lastName}`:`${contact.email}`}
                                   </div>
                                   <div className="text-xs">
                                     {contact.email? `${contact.email}`:""}

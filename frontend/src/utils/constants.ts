@@ -30,3 +30,5 @@ export const CHANNEL_ROUTE="/api/group"
 export const CREATE_CHANNEL_ROUTE=`${CHANNEL_ROUTE}/create-group`
 
 export const GET_USER_CHANNELS_ROUTE=`${CHANNEL_ROUTE}/get-user-groups`
+
+export const GET_CHANNEL_MESSAGES_ROUTE= `${CHANNEL_ROUTE}/get-group-messages`

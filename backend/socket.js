@@ -13,6 +13,7 @@ function setupSocket(server){
    })
 
    const userSocketMap=new Map();
+   
    async function sendGroupMessage(message){
        const{channelId,sender ,content,messageType,fileUrl}=message;
        const createdMessage=await Message.create({
@@ -24,7 +25,7 @@ function setupSocket(server){
         fileUrl
        })
 
-       const messageData=await Message.findById(createdMessage._id).populate("sender","id firstName lastName image color").exec()
+       const messageData=await Message.findById(createdMessage._id).populate("sender","_id firstName lastName image color").exec()
 
        await Group.findByIdAndUpdate(channelId,{
         $push:{messages:createdMessage._id}

@@ -11,7 +11,7 @@ const groupSchema= new mongoose.Schema({
 
     admin:{type:mongoose.Schema.ObjectId,ref:"Users",required:true},
 
-    messages:{type:mongoose.Schema.ObjectId,ref:"Messages",required:false},
+    messages: [{ type: mongoose.Schema.Types.ObjectId, ref: "Messages", default: [] }],
 
     createdAt:{
         type: Date,

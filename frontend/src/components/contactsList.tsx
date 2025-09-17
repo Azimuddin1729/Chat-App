@@ -80,8 +80,10 @@ const ContactList = ({contacts,isChannel=false}:{contacts:any,isChannel?:boolean
                         (
                             <span>{contact.name}</span>
                         ):
-                        (
-                            <span>{`${contact.firstName} ${contact.lastName}`}</span>
+                        (    
+                            contact.firstName?
+                            (<span>{`${contact.firstName} ${contact.lastName}`}</span>):
+                            (<span>{contact.email}</span>)
                         )
                     }
                   

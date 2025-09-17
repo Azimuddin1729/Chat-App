@@ -42,3 +42,28 @@ export async function getUserGroups(req,res,next){
         return res.status(500).send("intenral Server error")
     }
 }
+
+export async function getGroupMessages(req,res,next){
+    try{
+        const {channelId}=req.params;
+        const group = await Group.findById(channelId).populate({
+            path:"messages",
+            options: { sort: { timestamp: 1 } },
+            populate:{
+                path:"sender",
+                select:"firstName lastName email _id image color"
+            }
+        })
+
+        if(!group){
+            return res.status(404).send("Group not found");
+        }
+        // console.log("groupmessage:",group.messages);
+        return res.status(201).json({messages:group.messages})
+
+    }
+    catch(e){
+        console.log(e);
+        return res.status(500).send("intenral Server error")
+    }
+}

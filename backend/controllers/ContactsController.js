@@ -49,68 +49,78 @@ export async function contactsSearch(req,res,next){
 
 
 
-export async function getDMContacts(req,res,next){
-   try{
-     
-      let userId=req.userId;
-      userId=new mongoose.Types.ObjectId(userId);
-      const contacts=await Message.aggregate([
-        {
-          $match:{
-            $or:[{sender:userId},{recipient:userId}]
-          }
-        },
-        {
-          $sort:{timestamp:-1}
-        },
-        {
-          $group:{
-            _id:{
-              $cond:{
-                if:{$eq:["$sender",userId]},
-                then:"$recipient",
-                else:"$sender"
-              }
-            },
-            lastMessageTime:{$first:"$timestamp"}
-          }
-        }
-          ,
-        {
-          $lookup:{
-            from:User.collection.name,
-            localField:"_id",
-            foreignField:"_id",
-            as:"contact"
-          }
-        },
+export async function getDMContacts(req, res, next) {
+  try {
+    const userId = new mongoose.Types.ObjectId(req.userId);
 
-        {
-          $unwind:"$contact"
+    const contacts = await Message.aggregate([
+      // Only direct messages (exclude channel msgs where recipient === null)
+      {
+        $match: {
+          recipient: { $ne: null },
+          $or: [{ sender: userId }, { recipient: userId }],
         },
-        {
-          $project:{
-            _id:1,
-            lastMessageTime:1,
-            email:"$contact.email",
-            firstName:"$contact.firstName",
-            lastName:"$contact.lastName",
-            color:"$contact.color",
-            image:"$contact.image",
+      },
 
-          }
-        }
+      // So $first in the next stage picks the latest
+      { $sort: { timestamp: -1 } },
 
-      ])
-      return res.status(200).json({
-        contacts
-      })
-   }
-     catch(e){
-     console.log(e);
-     return res.status(500).send("Server Error");
-   }
+      // Compute "peerId" = the other user in this conversation
+      {
+        $addFields: {
+          peerId: { $cond: [{ $eq: ["$sender", userId] }, "$recipient", "$sender"] },
+        },
+      },
+
+      // One row per peer with the latest message fields
+      {
+        $group: {
+          _id: "$peerId",
+          lastMessageTime: { $first: "$timestamp" },
+          lastMessageType: { $first: "$messageType" },
+          lastContent: { $first: "$content" },
+          lastFileUrl: { $first: "$fileUrl" },
+        },
+      },
+
+      // Join peer profile
+      {
+        $lookup: {
+          from: User.collection.name, // "users"
+          localField: "_id",
+          foreignField: "_id",
+          as: "contact",
+        },
+      },
+      { $unwind: "$contact" },
+
+      // Final shape (keep _id as peerId if you want)
+      {
+        $project: {
+          _id: 1, // peerId
+          lastMessageTime: 1,
+          lastMessageType: 1,
+          lastContent: 1,
+          lastFileUrl: 1,
+          email: "$contact.email",
+          firstName: "$contact.firstName",
+          lastName: "$contact.lastName",
+          color: "$contact.color",
+          image: "$contact.image",
+        },
+      },
+
+      // ✅ Ensure final ordering by last message
+      { $sort: { lastMessageTime: -1 } },
+    ]);
+
+    return res.status(200).json({ contacts });
+  } catch (e) {
+    console.log(e);
+    return res.status(500).send("Server Error");
+  }
 }
+
 
 
 

@@ -111,3 +111,32 @@ export async function getDMContacts(req,res,next){
      return res.status(500).send("Server Error");
    }
 }
+
+
+
+export async function getAllContacts(req,res){
+   try{
+
+      const users=await User.find({
+        _id:{$ne:req.userId}
+      },"_id email firstName lastName ")
+
+      const contacts=users.map((user)=>{
+        return{
+        label:user.firstName?`${user.firstName} ${user.lastName}`:user.email,
+        value:user._id
+        }
+      })
+
+      // console.log(contacts);
+      
+      return res.status(200).json({
+        contacts
+      })
+   }
+     catch(e){
+     console.log(e);
+    //  console.log({e});
+     return res.status(500).send("Server Error");
+   }
+}

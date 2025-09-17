@@ -75,10 +75,18 @@ export function SocketProvider({children}:{children:ReactNode}){
                 }
         }
 
+        function channelMessageReceiveHandle(message:any){
+            if(selectedChatType!==undefined&&selectedChatData._id===message.channelId){
+              addMessage(message)
+            }
+        }
+
         socket.on("receiveMessage",messagecomingHandle);
+        socket.on("receive-channel-message",channelMessageReceiveHandle);
 
         return () => {
             socket.off("receiveMessage", messagecomingHandle);
+            socket.off("receive-channel-message",channelMessageReceiveHandle)
         };
 
      },[selectedChatData,selectedChatType,addMessage])

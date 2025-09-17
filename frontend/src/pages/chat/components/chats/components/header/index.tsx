@@ -19,9 +19,11 @@ const Header = () => {
     >
       <div className="flex gap-5 items-center w-full ">
 
-         <div className="gap-5  flex items-center">
-              
-               <Avatar className="h-12 w-12  rounded-full overflow-hidden">
+         <div className="gap-5 justify-center flex items-center">
+            <div className="w-12 h-12 relative">
+              {
+                selectedChatType==="contact"?
+                    <Avatar className="h-12 w-12  rounded-full overflow-hidden">
                                         {
                                         selectedChatData.image ? (<AvatarImage className="object-cover w-full h-full bg-black" src={`${SERVER}/${selectedChatData.image}`} 
                                             
@@ -38,13 +40,20 @@ const Header = () => {
                                             )
                                         }
 
-                </Avatar>
+                    </Avatar> : 
+                    <div className="bg-[#ffffff22] h-10 w-10 flex items-center justify-center rounded-full ">
+                                #
+                    </div>
+              }
+               
+            </div>
         </div>
 
         <div>
-          {selectedChatType==='contact'&& selectedChatData.firstName?
+          {selectedChatType==="channel"&&selectedChatData.name} 
+          {selectedChatType==='contact'&& (selectedChatData.firstName?
             `${selectedChatData.firstName} ${selectedChatData.lastName}`
-          : `${selectedChatData.email}`}
+          : `${selectedChatData.email}`)}
         </div>
 
       </div>

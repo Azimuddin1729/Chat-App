@@ -1,5 +1,5 @@
-import { useSetRecoilState, useResetRecoilState, useRecoilValue } from "recoil";
-import { selectedChatTypeAtom, selectedChatDataAtom, selectedChatMessagesAtom } from "./chatAtoms";
+import { useSetRecoilState, useResetRecoilState, useRecoilValue, useRecoilState } from "recoil";
+import { selectedChatTypeAtom, selectedChatDataAtom, selectedChatMessagesAtom, channelsAtom } from "./chatAtoms";
 
 export function useChatActions() {
 
@@ -35,11 +35,22 @@ export function useChatActions() {
     }])
   }
 
+  const [channels, setChannels] = useRecoilState(channelsAtom);
+
+  const addChannel = (channel:any) => {
+    setChannels([channel, ...channels]);
+  };
+  
+
   return {
     setChatType,      
     setChatData,      
     setChatMessages,   
     closeChat,    
-    addMessage,    
+    addMessage,
+    addChannel, 
+    channels,
+    setChannels,
+
   };
 }

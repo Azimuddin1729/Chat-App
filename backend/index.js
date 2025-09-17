@@ -8,6 +8,7 @@ import { authRouter } from "./routes/AuthRoute.js";
 import { contactRouter } from "./routes/ContactsRoute.js";
 import setupSocket from "./socket.js";
 import messageRouter from "./routes/MessagesRoute.js";
+import groupRouter from "./routes/GroupRoute.js";
 
 dotenv.config();
 const port=process.env.PORT||3003;
@@ -30,6 +31,7 @@ app.use("/uploads/files",express.static("uploads/files"));
 app.use("/api/auth",authRouter);
 app.use("/api/contacts",contactRouter);
 app.use("/api/messages",messageRouter);
+app.use("/api/group",groupRouter);
 
 const server =app.listen(port,()=>{
     console.log(`server is started at http://localhost:${port}`)

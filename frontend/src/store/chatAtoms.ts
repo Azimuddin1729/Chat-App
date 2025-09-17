@@ -23,5 +23,10 @@ export const directMessagesContactsAtom=atom<any[]>
 })
 
 
+export const channelsAtom = atom<any[]>({
+  key: "channelsAtom",
+  default: [],
+});
+
 
 // selector

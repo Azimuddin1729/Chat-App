@@ -1,4 +1,5 @@
 import Background from "@/assets/login3.png"
+import Background1 from "@/assets/login22.png"
 // import ChatIcon from "@/assets/chat-icon.svg"
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -103,7 +104,7 @@ const Auth = () => {
     <div className="h-[100vh] w-[100vw] flex items-center justify-center">
 
 
-       <div className="h-[80vh] w-[80vw] bg-green-300 border-3 border-white shadow-2xl
+       <div className="h-[80vh] w-[80vw] bg-[#5DF693] border-3 border-white shadow-2xl
         md:w-[70vw] lg:w-[60vw] xl:w-[50vw] rounded-3xl md:grid md:grid-cols-2">
             {/* i think as its flux-col already so w-full doenst make sense as whether we give or not it willl be actually w-full only  */}
               <div className="flex flex-col justify-center items-center w-full">
@@ -112,7 +113,7 @@ const Auth = () => {
                   <div className="flex items-center justify-center w-full">
 
                       <h2 className="font-medium text-4xl md:text-5xl">Welcome</h2>
-                      <img  alt="emoji"/>
+                      <img className="h-8 w-9" src={Background1} alt="emoji"/>
 
                   </div>
                  

@@ -16,6 +16,7 @@ const database_url=process.env.DATABASE_URL;
 
 const app= express();
 
+app.set("trust proxy", 1);
 
 app.use(cors({
     origin:process.env.ORIGIN,
@@ -33,17 +34,20 @@ app.use("/api/contacts",contactRouter);
 app.use("/api/messages",messageRouter);
 app.use("/api/group",groupRouter);
 
-const server =app.listen(port,()=>{
-    console.log(`server is started at http://localhost:${port}`)
-});
-
-setupSocket(server);
-
 
 const connectToMDb= async()=>{
     try{
         await mongoose.connect(database_url);
         console.log('DB connected succesfully');
+
+        //now server listen:
+
+        const server =app.listen(port,()=>{
+            console.log(`server is started at http://localhost:${port}`)
+        });
+
+        setupSocket(server);
+
     }
     catch(e){
         console.log('Something went wrong while connecting to DB',e.message);
@@ -51,5 +55,9 @@ const connectToMDb= async()=>{
 }
 
 connectToMDb();
+
+
+
+
 
 

@@ -4,7 +4,7 @@ import { Avatar  ,AvatarImage} from "@/components/ui/avatar";
 import { SERVER } from "@/utils/constants";
 import { getColor } from "@/lib/utils";
 import { selectedChatDataAtom, selectedChatTypeAtom } from "@/store/chatAtoms";
-import { useRecoilState, useRecoilValue } from "recoil";
+import { useRecoilValue } from "recoil";
 
 const Header = () => {
 

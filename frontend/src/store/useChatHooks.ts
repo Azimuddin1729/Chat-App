@@ -15,7 +15,6 @@ export function useChatActions() {
 
 
   const chatType = useRecoilValue(selectedChatTypeAtom);
-  const chatMessages = useRecoilValue(selectedChatMessagesAtom);
 
   //resetting function
   const closeChat = () => {

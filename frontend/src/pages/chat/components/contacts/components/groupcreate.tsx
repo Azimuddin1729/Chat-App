@@ -17,7 +17,7 @@ import {
 } from "@/components/ui/dialog"
 import { Input } from "@/components/ui/input"
 import { apiClient } from "@/lib/api-client"
-import { CREATE_CHANNEL_ROUTE, GET_ALL_CONTACTS_ROUTE, SERVER } from "@/utils/constants"
+import { CREATE_CHANNEL_ROUTE, GET_ALL_CONTACTS_ROUTE } from "@/utils/constants"
 
 // import { useChatActions} from "@/store/useChatHooks.js"
 import { Button } from "@/components/ui/button"

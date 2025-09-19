@@ -1,6 +1,6 @@
 import { createContext,useRef,useContext,useEffect, type ReactNode,} from "react";
 import { userInfoAtom } from "@/store/authAtoms";
-import { selectedChatDataAtom,selectedChatMessagesAtom,selectedChatTypeAtom } from "@/store/chatAtoms";
+import { selectedChatDataAtom,selectedChatTypeAtom } from "@/store/chatAtoms";
 // import { useNavigate } from "react-router-dom";
 import {useRecoilValue } from "recoil";
 import {io, Socket} from "socket.io-client"

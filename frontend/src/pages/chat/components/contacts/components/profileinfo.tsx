@@ -1,13 +1,13 @@
 import { Avatar,AvatarImage } from "@/components/ui/avatar"
 import { userInfoAtom } from "@/store/authAtoms"
 import { LOGOUT_ROUTE, SERVER } from "@/utils/constants";
-import { useRecoilState, useRecoilValue } from "recoil"
+import { useRecoilState} from "recoil"
 
 import { Tooltip,TooltipTrigger,TooltipContent } from "@/components/ui/tooltip";
-import { FiEdit, FiEdit2 } from "react-icons/fi";
+import { FiEdit2 } from "react-icons/fi";
 import { useNavigate } from "react-router-dom";
 
-import { IoLogOut, IoPowerSharp } from "react-icons/io5";
+import { IoPowerSharp } from "react-icons/io5";
 import { apiClient } from "@/lib/api-client";
 
 import { getColor } from "@/lib/utils";

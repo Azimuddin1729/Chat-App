@@ -10,6 +10,10 @@ import setupSocket from "./socket.js";
 import messageRouter from "./routes/MessagesRoute.js";
 import groupRouter from "./routes/GroupRoute.js";
 
+
+import path from "path";
+import { fileURLToPath } from "url";
+
 dotenv.config();
 const port=process.env.PORT||3003;
 const database_url=process.env.DATABASE_URL;
@@ -34,6 +38,18 @@ app.use("/api/contacts",contactRouter);
 app.use("/api/messages",messageRouter);
 app.use("/api/group",groupRouter);
 
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+const clientDist = path.join(__dirname, "client");
+app.use(express.static(clientDist));
+
+app.get("*", (req, res, next) => {
+  if (req.path.startsWith("/api")) return next();          
+  if (req.path.startsWith("/uploads")) return next();      
+  res.sendFile(path.join(clientDist, "index.html"));
+});
+
 
 const connectToMDb= async()=>{
     try{
@@ -43,7 +59,7 @@ const connectToMDb= async()=>{
         //now server listen:
 
         const server =app.listen(port,()=>{
-            console.log(`server is started at http://localhost:${port}`)
+            console.log(`server is started `)
         });
 
         setupSocket(server);

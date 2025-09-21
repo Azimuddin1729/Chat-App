@@ -41,12 +41,11 @@ app.use("/api/group",groupRouter);
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-const clientDist = path.join(__dirname, "client");
+
+const clientDist = path.join(__dirname, "../frontend/dist");
 app.use(express.static(clientDist));
 
-app.get("*", (req, res, next) => {
-  if (req.path.startsWith("/api")) return next();          
-  if (req.path.startsWith("/uploads")) return next();      
+app.get(/^\/(?!api|uploads|socket\.io).*/, (req, res) => {
   res.sendFile(path.join(clientDist, "index.html"));
 });
 
